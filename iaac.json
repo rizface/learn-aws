@@ -1,0 +1,57 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "CloudFormation template structure",
+    "Parameters": {
+        "KeyName": {
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Description": "AWS KeyPair to SSH into the instance",
+            "Default": "mymachinekey"
+        },
+        "NumberOfVirtualMachine": {
+            "Type": "Number",
+            "Default": 1,
+            "MinValue": 1,
+            "MaxValue": 2
+        }
+    },
+    "Resources": {
+        "VM": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": "ami-0230bd60aa48260c6",
+                "InstanceType": "t2.micro",
+                "SecurityGroups": ["launch-wizard-2"],
+                "KeyName": "mymachinekey"
+            }
+        },
+        "ElasticIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {}
+        },
+        "ElasticIPAssociation": {
+            "Type": "AWS::EC2::EIPAssociation",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": ["ElasticIP", "AllocationId"]
+                },
+                "InstanceId": {
+                    "Ref": "VM"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "InstancesID": {
+            "Description": "ID of the instance",
+            "Value": {
+                "Ref": "VM"
+            }
+        },
+        "PublicIP": {
+            "Description": "Public IP of the instance",
+            "Value": {
+                "Fn::GetAtt": ["VM", "PublicIp"]
+            }
+        }
+    }
+}
