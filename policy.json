@@ -1,10 +1,27 @@
 {
     "Version": "2012-10-17",
-    "Statements": [
+    "Statement": [
         {
-            "Resource":"",
-            "Actions": "",
-            "Effect": ""
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "us-east-1"
+                }
+            }
+        },
+        {
+            "Sid": "Statement2",
+            "Effect": "Deny",
+            "Action": "ec2:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestedRegion": "ap-southeast-3"
+                }
+            }
         }
     ]
 }
